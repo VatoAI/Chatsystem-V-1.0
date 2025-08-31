@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import LoginForm from './components/LoginForm'
 import ChatInterface from './components/ChatInterface'
 import MatrixWelcome from './components/MatrixWelcome'
+import MatrixGamingLogin from './components/MatrixGamingLogin'
 import SecurityDashboard from './components/security/SecurityDashboard-simple'
 import { chatService } from './lib/chatService'
 import type { User } from './shared/types'
 
-type AppMode = 'matrix-welcome' | 'login' | 'chat' | 'security'
+type AppMode = 'matrix-welcome' | 'login' | 'chat' | 'security' | 'gaming'
 type PillChoice = 'red' | 'blue' | null
 
 function App() {
@@ -63,6 +64,10 @@ function App() {
     } else if (choice === 'blue') {
       setMode('login')
     }
+  }
+
+  const handleGamingMode = () => {
+    setMode('gaming')
   }
 
   return (
@@ -153,7 +158,10 @@ function App() {
               transition={{ duration: 0.8 }}
               className="fixed inset-0"
             >
-              <MatrixWelcome onPillChoice={handlePillChoice} />
+              <MatrixWelcome 
+                onPillChoice={handlePillChoice} 
+                onGamingMode={handleGamingMode}
+              />
             </motion.div>
           )}
           
@@ -263,6 +271,22 @@ function App() {
                   />
                 </motion.div>
               </div>
+            </motion.div>
+          )}
+          
+          {mode === 'gaming' && (
+            <motion.div
+              key="gaming"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="fixed inset-0"
+            >
+              <MatrixGamingLogin 
+                onLogin={handleLogin}
+                onBack={() => setMode('matrix-welcome')}
+              />
             </motion.div>
           )}
           
